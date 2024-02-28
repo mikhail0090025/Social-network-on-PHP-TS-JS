@@ -14,5 +14,8 @@
 </head>
 <body>
     <h3><?php echo $user->Username; ?></h3>
+    <b><?php echo $user->Birthday->diff(new DateTime())->y; ?> years</b><br>
+    <p>My bio:</p>
+    <b><?php echo $user->Bio; ?></b>
 </body>
 </html>
