@@ -9,7 +9,7 @@
 <body>
 <?php
 session_start();
-include "Classes.php";
+require_once "Classes.php";
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -51,6 +51,30 @@ if(isset($_POST["Registrate"])){
     else {
         echo "<p>Username " . $login . " is not free. Try another username</p>";
     }
+}
+
+// Change bio
+if(isset($_POST["ChangeBio"])){
+    $new_bio = $_POST["new_bio"];
+    $cur_user = AccountManager::FindByUsername($_SESSION["current_user"]);
+    $cur_user->Bio = $new_bio;
+    AccountManager::UpdateUser($cur_user);
+    echo "<script>window.location.href = 'Profile.php';</script>";
+    //header("Location: Profile.php");
+    //exit();
+}
+
+// Search users
+if(isset($_GET["search_user"])){
+    $username = $_GET["search_user"];
+    try{
+        $result = AccountManager::FindByUsername($username);
+        $_SESSION["found_users"] = $result;
+    }
+    catch(Throwable $th){
+        $_SESSION["found_users"] = false;
+    }
+    echo "<script>window.location.href = 'Profile.php';</script>";
 }
 ?>    
 </body>

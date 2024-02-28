@@ -24,6 +24,7 @@ include "Classes.php";
                 </form>
                 <a href="Registration.php"><button class="btn btn-primary">Registration</button></a>
             </div>
+            <a href="AllUsers.php"><button class="btn btn-success">All users</button></a>
         </center>
     </div>
 </body>
