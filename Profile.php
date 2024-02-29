@@ -56,6 +56,7 @@
             </form>
         </div>
     </div>
+    <a href="AllUsers.php"><button class="btn btn-success">All users</button></a>
     <script src="Profile.js"></script>
 </body>
 </html>

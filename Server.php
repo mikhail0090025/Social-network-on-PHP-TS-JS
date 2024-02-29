@@ -66,7 +66,8 @@ if(isset($_POST["ChangeBio"])){
 
 // Search users
 if(isset($_GET["search_user"])){
-    $username = $_GET["search_user"];
+    $username = $_GET["username"];
+    echo "SEARCHING: " . $_GET["username"];
     try{
         $result = AccountManager::FindByUsername($username);
         $_SESSION["found_users"] = $result;
