@@ -7,6 +7,8 @@
     <title>Server page</title>
 </head>
 <body>
+    <h2>Server page</h2>
+    <p>This is server page. You have to be redirected from it in several seconds. If you stay here for a long time, it seems to be an error.</p>
 <?php
 session_start();
 require_once "Classes.php";
@@ -73,6 +75,31 @@ if(isset($_GET["search_user_by_name"])){
     }
     echo "<script>window.location.href = 'Profile.php';</script>";
 }
-?>    
+
+// View some user
+if(isset($_POST["view_page"])){
+    $username = $_POST["username"];
+    $_SESSION["viewed_user"] = $username;
+    echo "<script>window.location.href = 'ViewProfile.php';</script>";
+}
+
+//Add friend
+if(isset($_POST["add_friend"])){
+    $requesting_user = AccountManager::FindByUsername($_POST["requesting_user"]);
+    $accepting_user = AccountManager::FindByUsername($_POST["accepting_user"]);
+
+    $requesting_user->AddFriend($accepting_user->Username);
+    echo "<script>window.location.href = 'ViewProfile.php';</script>";
+}
+
+//Remove friend
+if(isset($_POST["remove_friend"])){
+    $requesting_user = AccountManager::FindByUsername($_POST["requesting_user"]);
+    $accepting_user = AccountManager::FindByUsername($_POST["accepting_user"]);
+
+    $requesting_user->RemoveFriend($accepting_user->Username);
+    echo "<script>window.location.href = 'ViewProfile.php';</script>";
+}
+?>
 </body>
 </html>

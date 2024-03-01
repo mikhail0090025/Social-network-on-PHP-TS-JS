@@ -36,7 +36,7 @@
             <h4>My friends: </h4>
             <?php
                 foreach($user->Friends as $friend){
-                    echo "<div class='border border-primary rounded p-2 md-2'><h5>" . $friend->Username . "</h5></div>";
+                    echo "<div class='border border-primary rounded p-2 md-2'><h5>" . $friend . "</h5></div>";
                 }
             ?>
         </div>
@@ -57,11 +57,18 @@
                     }
                     else{
                         //echo serialize($_SESSION["found_users"]);
-                        echo "<div class='border rounded border-primary p-3'>";
-                        echo "<p><b>" . unserialize($_SESSION["found_users"]["data"])->Username . "</b></p>";
-                        echo "<p>" . unserialize($_SESSION["found_users"]["data"])->Birthday->diff(new DateTime())->y . " years</p>";
-                        echo "<p>" . unserialize($_SESSION["found_users"]["data"])->Bio . "</p>";
-                        echo "</div>";
+                        $unserializedData = unserialize($_SESSION["found_users"]["data"]);
+                        echo <<<HTML
+                        <div class='border rounded border-primary p-3'>
+                            <p><b>{$unserializedData->Username}</b></p>
+                            <p>{$unserializedData->Birthday->diff(new DateTime())->y} years</p>
+                            <p>{$unserializedData->Bio}</p>
+                            <form action='Server.php' method='post'>
+                                <input type="hidden" name="username" value="{$unserializedData->Username}">
+                                <input type="submit" name="view_page" id="view_page" value="View page" class="btn btn-primary">
+                            </form>
+                        </div>
+                        HTML;
                     }
                 }
                 ?>

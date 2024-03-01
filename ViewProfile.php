@@ -1,8 +1,9 @@
 <?php
 session_start();
+require_once "Classes.php";
+
 $cur_user = AccountManager::FindByUsername($_SESSION["current_user"]);
 $viewed_user = AccountManager::FindByUsername($_SESSION["viewed_user"]);
-require_once "Classes.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,21 +16,32 @@ require_once "Classes.php";
 </head>
 <body>
     <h2><?php echo $viewed_user->Username; ?></h2>
+    <form action="Server.php" method="post">
     <?php
-    if($viewed_user->AreFriends($cur_user))
+    if($cur_user->AreFriends($viewed_user->Username))
     {
-        echo "<p><b>You are friends</b></p>";
+        echo <<<HTML
+            <input type="submit" value="Remove friend" name="remove_friend" id="remove_friend">
+            <input type="hidden" name="requesting_user" value="{$cur_user->Username}">
+            <input type="hidden" name="accepting_user" value="{$viewed_user->Username}">
+        HTML;
     }
     else{
         echo <<<HTML
-        <form action="Server.php" method="post">
             <input type="submit" value="Add friend" name="add_friend" id="add_friend">
-        </form>
+            <input type="hidden" name="requesting_user" value="{$cur_user->Username}">
+            <input type="hidden" name="accepting_user" value="{$viewed_user->Username}">
         HTML;
     }
     ?>
+    </form>
     <script>
-        $("body").on("mouseenter", "#add_friend", function(){});
+        $("#add_friend").attr("class", "btn btn-primary");
+        $("#remove_friend").attr("class", "btn btn-danger");
+        $("body").on("mouseenter", "#add_friend", function(){ $(this).attr("class", "btn btn-secondary"); });
+        $("body").on("mouseleave", "#add_friend", function(){ $(this).attr("class", "btn btn-primary"); });
+        $("body").on("mouseenter", "#remove_friend", function(){ $(this).attr("class", "btn btn-secondary"); });
+        $("body").on("mouseleave", "#remove_friend", function(){ $(this).attr("class", "btn btn-danger"); });
     </script>
 </body>
 </html>

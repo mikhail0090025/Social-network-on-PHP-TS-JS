@@ -119,13 +119,34 @@ class User{
 
     public function AddFriend(string $friend_name){
         if(in_array($friend_name, $this->Friends)) return;
+        echo "<p>Friend added $friend_name</p>";
         $new_friend = AccountManager::FindByUsername($friend_name);
         $this->Friends[] = $friend_name;
+        AccountManager::UpdateUser($this);
         $new_friend->AddFriend($this->Username);
+        AccountManager::UpdateUser($new_friend);
     }
 
-    public function AreFriends($user_) : bool {
-        return in_array($user_, $this->Friends);
+    public function RemoveFriend(string $friend_name){
+        if(in_array($friend_name, $this->Friends)) return;
+        echo "<p>Friend removed $friend_name</p>";
+        $removed_friend = AccountManager::FindByUsername($friend_name);
+        $index = array_search($friend_name, $this->Friends);
+        if($index !== false){
+            unset($this->Friends[$index]);
+            AccountManager::UpdateUser($this);
+            $removed_friend->RemoveFriend($this->Username);
+            AccountManager::UpdateUser($removed_friend);
+        }
+        else echo "User $friend_name is not in list!";
+    }
+
+    public function AreFriends(string $username_) : bool {
+        // debug
+        echo "Friends array: " . print_r($this->Friends, true) . "<br>";
+        echo "Username to check: " . $username_ . "<br>";
+
+        return in_array($username_, $this->Friends);
     }
 }
 ?>
