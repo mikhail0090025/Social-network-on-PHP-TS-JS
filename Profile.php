@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include "Classes.php";
+    require_once "Classes.php";
     $user = AccountManager::FindByUsername($_SESSION["current_user"]);
 ?>
 <!DOCTYPE html>
@@ -11,6 +11,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="Other/bootstrap.min.css">
     <link rel="stylesheet" href="Other/style.css">
+    <script src="Other\jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <h3><?php echo $user->Username; ?></h3>
@@ -41,19 +42,30 @@
         </div>
         <div id="SearchNewPeopleBlock" class="border border-success rounded p-2 col-sm-5 col-lg-4 col-md-4 col-xl-3">
             <h3>Search new people</h3>
-            <form action="Server.php" method="get">
-                <input type="text" placeholder="Enter username..." name="username"><br><br>
-                <input type="submit" value="Search..." class="btn btn-success" name="search_user">
-                <div id="results"><?php
-                if(isset($_SESSION["found_users"])){
-                    if($_SESSION["found_users"] == false){
-                        echo "<p>Users were not found</p>";
-                    }else{
-                        echo "<b>" . $_SESSION["found_users"]->Username . "</b>";
+            <form action="Server.php" method="get" class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="text" name="username_to_search" id="username_to_search" placeholder="Write username..." class="form-control">
+                    <input type="submit" value="Search..." class="btn btn-primary mb-2" name="search_user_by_name">
+                </div>
+            </form>
+            <div id="results">
+                <?php
+                if(isset($_SESSION["found_users"], $_SESSION["found_users"]["status"], $_SESSION["found_users"]["data"])){
+                    if($_SESSION["found_users"]["status"] == false){
+                        //echo serialize($_SESSION["found_users"]);
+                        echo "<p><b>User " . $_SESSION["found_users"]["data"] . " was not found</b></p>";
+                    }
+                    else{
+                        //echo serialize($_SESSION["found_users"]);
+                        echo "<div class='border rounded border-primary p-3'>";
+                        echo "<p><b>" . unserialize($_SESSION["found_users"]["data"])->Username . "</b></p>";
+                        echo "<p>" . unserialize($_SESSION["found_users"]["data"])->Birthday->diff(new DateTime())->y . " years</p>";
+                        echo "<p>" . unserialize($_SESSION["found_users"]["data"])->Bio . "</p>";
+                        echo "</div>";
                     }
                 }
-                ?></div>
-            </form>
+                ?>
+            </div>
         </div>
     </div>
     <a href="AllUsers.php"><button class="btn btn-success">All users</button></a>

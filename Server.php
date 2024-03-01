@@ -11,10 +11,6 @@
 session_start();
 require_once "Classes.php";
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 // Logging into account
 if(isset($_POST["LogInAccount"], $_POST["login"], $_POST["password"])){
     try{
@@ -65,15 +61,15 @@ if(isset($_POST["ChangeBio"])){
 }
 
 // Search users
-if(isset($_GET["search_user"])){
-    $username = $_GET["username"];
-    echo "SEARCHING: " . $_GET["username"];
+if(isset($_GET["search_user_by_name"])){
+    $username = $_GET["username_to_search"];
+    echo "SEARCHING: " . $_GET["username_to_search"];
     try{
         $result = AccountManager::FindByUsername($username);
-        $_SESSION["found_users"] = $result;
+        $_SESSION["found_users"] = ["status" => true, "data" => serialize($result)];
     }
     catch(Throwable $th){
-        $_SESSION["found_users"] = false;
+        $_SESSION["found_users"] = ["status" => false, "data" => $username];
     }
     echo "<script>window.location.href = 'Profile.php';</script>";
 }

@@ -123,5 +123,9 @@ class User{
         $this->Friends[] = $friend_name;
         $new_friend->AddFriend($this->Username);
     }
+
+    public function AreFriends($user_) : bool {
+        return in_array($user_, $this->Friends);
+    }
 }
 ?>
