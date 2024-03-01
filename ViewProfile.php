@@ -15,6 +15,7 @@ $viewed_user = AccountManager::FindByUsername($_SESSION["viewed_user"]);
     <script src="Other/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    <a href="Profile.php"><button class="btn btn-primary">Home</button></a>
     <h2><?php echo $viewed_user->Username; ?></h2>
     <form action="Server.php" method="post">
     <?php

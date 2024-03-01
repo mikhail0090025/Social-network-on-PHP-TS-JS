@@ -118,13 +118,14 @@ class User{
     }
 
     public function AddFriend(string $friend_name){
-        if(in_array($friend_name, $this->Friends)) return;
-        echo "<p>Friend added $friend_name</p>";
-        $new_friend = AccountManager::FindByUsername($friend_name);
-        $this->Friends[] = $friend_name;
-        AccountManager::UpdateUser($this);
-        $new_friend->AddFriend($this->Username);
-        AccountManager::UpdateUser($new_friend);
+        if(!in_array($friend_name, $this->Friends)){
+            echo "<p>Friend added $friend_name</p>";
+            $new_friend = AccountManager::FindByUsername($friend_name);
+            $this->Friends[] = $friend_name;
+            AccountManager::UpdateUser($this);
+            $new_friend->AddFriend($this->Username);
+            AccountManager::UpdateUser($new_friend);
+        }
     }
 
     public function RemoveFriend(string $friend_name){

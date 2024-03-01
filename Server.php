@@ -9,6 +9,7 @@
 <body>
     <h2>Server page</h2>
     <p>This is server page. You have to be redirected from it in several seconds. If you stay here for a long time, it seems to be an error.</p>
+    <a href="Profile.php">Back to profile</a>
 <?php
 session_start();
 require_once "Classes.php";
@@ -58,14 +59,11 @@ if(isset($_POST["ChangeBio"])){
     $cur_user->Bio = $new_bio;
     AccountManager::UpdateUser($cur_user);
     echo "<script>window.location.href = 'Profile.php';</script>";
-    //header("Location: Profile.php");
-    //exit();
 }
 
 // Search users
 if(isset($_GET["search_user_by_name"])){
     $username = $_GET["username_to_search"];
-    echo "SEARCHING: " . $_GET["username_to_search"];
     try{
         $result = AccountManager::FindByUsername($username);
         $_SESSION["found_users"] = ["status" => true, "data" => serialize($result)];
@@ -99,6 +97,15 @@ if(isset($_POST["remove_friend"])){
 
     $requesting_user->RemoveFriend($accepting_user->Username);
     echo "<script>window.location.href = 'ViewProfile.php';</script>";
+}
+
+//Remove all friends
+if(isset($_POST["remove_all_friends"])){
+    $requesting_user = AccountManager::FindByUsername($_POST["username"]);
+
+    $requesting_user->Friends = [];
+    AccountManager::UpdateUser($requesting_user);
+    echo "<script>window.location.href = 'Profile.php';</script>";
 }
 ?>
 </body>
